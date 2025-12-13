@@ -1,0 +1,835 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MECHANICAL MEMORY | Portfolio</title>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Space+Grotesk:wght@300;500;700&family=Fira+Code:wght@400&display=swap"
+        rel="stylesheet">
+
+    <style>
+        /* --- 1. GLOBAL VARIABLES --- */
+        :root {
+            --bg-color: #050505;
+            --text-main: #ffffff;
+            --text-secondary: #b0b0b0;
+            --accent-color: #00f3ff;
+            --accent-hover: #bc13fe;
+            --card-bg: rgba(255, 255, 255, 0.03);
+            --glass-border: 1px solid rgba(255, 255, 255, 0.1);
+            --code-bg: #0d0d0d;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            font-family: 'Space Grotesk', sans-serif;
+            overflow-x: hidden;
+            line-height: 1.8;
+        }
+
+        h1,
+        h2,
+        h3,
+        h4 {
+            font-family: 'Orbitron', sans-serif;
+            letter-spacing: 1px;
+        }
+
+        a {
+            text-decoration: none;
+            color: inherit;
+            transition: 0.3s;
+        }
+
+        img {
+            display: block;
+            max-width: 100%;
+            height: auto;
+        }
+
+        /* --- 2. BACKGROUND --- */
+        #canvas-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            opacity: 0.3;
+        }
+
+        /* --- 3. NAVIGATION --- */
+        .top-bar {
+            padding: 20px 50px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: var(--glass-border);
+            backdrop-filter: blur(10px);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            background: rgba(5, 5, 5, 0.9);
+        }
+
+        .back-link {
+            color: var(--text-secondary);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-family: 'Orbitron', sans-serif;
+            font-size: 0.9rem;
+        }
+
+        .back-link:hover {
+            color: var(--accent-color);
+            transform: translateX(-5px);
+        }
+
+        /* --- 4. HERO SECTION --- */
+        .project-hero {
+            height: 70vh;
+            position: relative;
+            display: flex;
+            align-items: flex-end;
+            justify-content: center;
+            padding-bottom: 80px;
+            /* 背景图路径请确认 */
+            background: url('./Asset/Project3-Memory/Memory_fengmian.png') center/cover no-repeat;
+            background-color: #111;
+        }
+
+        .project-hero::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(0deg, var(--bg-color) 0%, rgba(5, 5, 5, 0.5) 60%, transparent 100%);
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 2;
+            text-align: center;
+            max-width: 900px;
+        }
+
+        .hero-content h1 {
+            font-size: 4.5rem;
+            text-transform: uppercase;
+            margin-bottom: 10px;
+            text-shadow: 0 0 40px rgba(0, 243, 255, 0.4);
+        }
+
+        .hero-tags {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .hero-tags span {
+            background: var(--accent-color);
+            color: #000;
+            padding: 6px 14px;
+            font-weight: 700;
+            font-size: 0.8rem;
+            text-transform: uppercase;
+        }
+
+        /* --- 5. MAIN CONTAINER --- */
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 0 20px 100px;
+            position: relative;
+            margin-top: -60px;
+            z-index: 3;
+        }
+
+        /* --- 6. OVERVIEW DATA BAR --- */
+        .data-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            background: rgba(10, 10, 10, 0.9);
+            border: 1px solid var(--accent-color);
+            border-radius: 8px;
+            padding: 25px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
+            margin-bottom: 60px;
+            backdrop-filter: blur(10px);
+        }
+
+        .data-item {
+            text-align: center;
+            border-right: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .data-item:last-child {
+            border-right: none;
+        }
+
+        .data-label {
+            display: block;
+            font-size: 0.75rem;
+            color: var(--text-secondary);
+            margin-bottom: 5px;
+            font-family: 'Orbitron', sans-serif;
+            letter-spacing: 1px;
+        }
+
+        .data-value {
+            display: block;
+            font-size: 1rem;
+            font-weight: 700;
+            color: #fff;
+        }
+
+        /* --- 7. VIDEO & BUTTONS --- */
+        .video-wrapper {
+            width: 100%;
+            padding-bottom: 56.25%;
+            background: #000;
+            border: var(--glass-border);
+            border-radius: 8px;
+            position: relative;
+            overflow: hidden;
+            margin-bottom: 80px;
+            box-shadow: 0 0 30px rgba(0, 0, 0, 0.3);
+        }
+
+        .video-wrapper iframe {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            border: none;
+        }
+
+        .btn-center {
+            display: inline-block;
+            padding: 15px 40px;
+            border: 1px solid var(--accent-color);
+            color: var(--accent-color);
+            font-family: 'Orbitron', sans-serif;
+            text-transform: uppercase;
+            margin-top: 50px;
+            transition: 0.3s;
+        }
+
+        .btn-center:hover {
+            background: var(--accent-color);
+            color: #000;
+            box-shadow: 0 0 20px var(--accent-color);
+        }
+
+        /* --- 8. CONTENT BLOCKS --- */
+        .section-title {
+            font-size: 1.8rem;
+            color: var(--accent-color);
+            margin-bottom: 30px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            padding-bottom: 10px;
+            margin-top: 60px;
+        }
+
+        .text-block {
+            font-size: 1.1rem;
+            color: #ccc;
+            margin-bottom: 40px;
+            text-align: justify;
+        }
+
+        /* --- 9. TABS STYLING (NEW) --- */
+        .tabs-nav {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 30px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .tab-btn {
+            background: transparent;
+            border: none;
+            color: var(--text-secondary);
+            font-family: 'Orbitron', sans-serif;
+            font-size: 1rem;
+            padding: 10px 20px;
+            cursor: pointer;
+            border-bottom: 2px solid transparent;
+            transition: 0.3s;
+        }
+
+        .tab-btn:hover {
+            color: #fff;
+            text-shadow: 0 0 8px rgba(0, 243, 255, 0.5);
+        }
+
+        .tab-btn.active {
+            color: var(--accent-color);
+            border-bottom: 2px solid var(--accent-color);
+        }
+
+        .tab-content {
+            display: none;
+            animation: fadeIn 0.5s ease;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* --- 10. DESIGN & TECH LAYOUTS --- */
+        .sub-header-container {
+            background: rgba(0, 243, 255, 0.05);
+            border-left: 3px solid var(--accent-color);
+            padding: 10px 20px;
+            margin: 40px 0 20px 0;
+        }
+
+        .sub-header-container h3 {
+            font-size: 1.2rem;
+            margin: 0;
+            color: #fff;
+        }
+
+        .two-col {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 40px;
+            align-items: start;
+            margin-bottom: 40px;
+        }
+
+        .flow-list {
+            list-style: none;
+            counter-reset: flow-counter;
+        }
+
+        .flow-list li {
+            position: relative;
+            padding-left: 50px;
+            margin-bottom: 20px;
+            color: #ccc;
+        }
+
+        .flow-list li::before {
+            counter-increment: flow-counter;
+            content: counter(flow-counter);
+            position: absolute;
+            left: 0;
+            top: 0;
+            width: 35px;
+            height: 35px;
+            background: rgba(0, 243, 255, 0.1);
+            border: 1px solid var(--accent-color);
+            color: var(--accent-color);
+            border-radius: 50%;
+            text-align: center;
+            line-height: 33px;
+            font-weight: bold;
+            font-family: 'Orbitron', sans-serif;
+        }
+
+        .tech-card {
+            background: var(--card-bg);
+            border: var(--glass-border);
+            padding: 25px;
+            border-radius: 8px;
+            margin-bottom: 30px;
+        }
+
+        .tech-card h4 {
+            color: var(--accent-color);
+            margin-bottom: 15px;
+            font-family: 'Orbitron', sans-serif;
+        }
+
+        .blueprint-img {
+            border: 1px solid #333;
+            border-radius: 4px;
+            margin-top: 15px;
+            width: 100%;
+        }
+
+        .gallery-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 20px;
+            margin-bottom: 40px;
+        }
+
+        @media (max-width: 768px) {
+            .project-hero h1 {
+                font-size: 3rem;
+            }
+
+            .data-grid {
+                grid-template-columns: 1fr 1fr;
+                gap: 20px;
+            }
+
+            .data-item {
+                border-right: none;
+            }
+
+            .container {
+                padding: 0 20px 60px;
+            }
+
+            .two-col {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <canvas id="canvas-bg"></canvas>
+
+    <div class="top-bar">
+        <a href="index.html" class="back-link"><span>&lt; // HOME</span></a>
+        <div style="color: var(--accent-color); font-weight: 700;">DEV_LOG::MECHANICAL MEMORY</div>
+    </div>
+
+    <header class="project-hero">
+        <div class="hero-content">
+            <div class="hero-tags">
+                <span>First-person</span>
+                <span>Narrative</span>
+            </div>
+            <h1>MECHANICAL MEMORY</h1>
+        </div>
+    </header>
+
+    <div class="container">
+
+        <div class="data-grid">
+            <div class="data-item">
+                <span class="data-label">ENGINE</span><span class="data-value">Unreal 5</span>
+            </div>
+            <div class="data-item">
+                <span class="data-label">ROLE</span><span class="data-value">Solo Developer</span>
+            </div>
+            <div class="data-item">
+                <span class="data-label">LANGUAGE</span><span class="data-value">Blueprints</span>
+            </div>
+            <div class="data-item">
+                <span class="data-label">TIMELINE</span><span class="data-value">June 2024 - Mar 2025</span>
+            </div>
+        </div>
+
+        <div class="video-wrapper">
+            <iframe width="560" height="315" src="https://www.youtube.com/embed/_an1mUYnwX4?si=u0xsxbWJwRR0QJ33"
+                allowfullscreen></iframe>
+        </div>
+
+        <section style="text-align: center; margin-top: 50px;">
+            <div style="display: flex; justify-content: center; gap: 20px; flex-wrap: wrap;">
+                <a href="./Asset/Project3-Memory/Portfolio_Final_Final_1-5.pdf" download class="btn-center"
+                    style="margin-top: 0;">
+                    Download Design Document (PDF)
+                </a>
+            </div>
+        </section>
+
+        <section>
+            <h2 class="section-title">OVERVIEW</h2>
+            <p class="text-block">
+                Mechanical Memory is a first-person narrative game set in a near-future world.
+                The player takes the role of Lillian, a young woman raised by her grandmother and a robotic nanny.
+                After her grandmother's death, Lillian discovers a journal and two memory chips that reveal the
+                buried truth about her family. Through the act of revisiting these memories, players explore the
+                intertwined fates of three generations.
+            </p>
+        </section>
+
+         <section id="story">
+            <h2 class="section-title">STORY</h2>
+
+            <div class="tech-card">
+                <div style="margin-bottom: 30px; max-width: 800px;">
+                    <p class="text-block">
+                        This game takes inspiration from Ryūnosuke Akutagawa's <em>In a Grove</em>, which retells a murder from conflicting perspectives.
+                        Likewise, I aim to explore love through <strong>multiple subjective viewpoints</strong>, focusing on expressing each character's emotions and inner world.
+                    </p>
+                </div>
+
+                <div class="two-col" style="align-items: flex-start; gap: 40px;">
+                    
+                    <div>
+                        <h5 style="color: #ddd; margin-bottom: 15px; font-weight: normal; border-left: 3px solid var(--accent-color); padding-left: 10px;">
+                            Character Relationship Map
+                        </h5>
+                        <img src="./Asset/Project3-Memory/image 5.png" 
+                             alt="Character Relationship Diagram" 
+                             class="blueprint-img" 
+                             style="margin-top:0; width: 100%; height: auto; border: 1px solid rgba(255,255,255,0.1);">
+                    </div>
+
+                    <div>
+                        <h5 style="color: #ddd; margin-bottom: 15px; font-weight: normal; border-left: 3px solid var(--accent-color); padding-left: 10px;">
+                            Narrative Timeline
+                        </h5>
+                        <img src="./Asset/Project3-Memory/image 6.png" 
+                             alt="Story Timeline Flowchart" 
+                             class="blueprint-img" 
+                             style="margin-top:0; width: 100%; height: auto; border: 1px solid rgba(255,255,255,0.1);">
+                    </div>
+
+                </div>
+            </div>
+        </section>
+
+        <section>
+            <h2 class="section-title">DESIGN & IMPLEMENTATION</h2>
+
+            <div class="tabs-nav">
+                <button class="tab-btn active" onclick="openLevel(event, 'Level1')">Level 1</button>
+                <button class="tab-btn" onclick="openLevel(event, 'Level2')">Level 2</button>
+                <button class="tab-btn" onclick="openLevel(event, 'Level3')">Level 3</button>
+            </div>
+
+            <div id="Level1" class="tab-content active">
+
+                <div class="sub-header-container">
+                    <h3>01. Game Flow</h3>
+                </div>
+
+                <div class="two-col">
+                    <div>
+                        <img src="./Asset/Project3-Memory/image1.png" alt="Level 1 Map" class="blueprint-img"
+                            style="border-color: var(--accent-color);">
+                    </div>
+                    <div>
+                        <ol class="flow-list">
+                            <li>Lillian narrates her family background.</li>
+                            <li>Photos showing the relationship between Celeste, Lillian, and Elena.</li>
+                            <li>Talks with Elena and is asked to clean Celeste’s room.</li>
+                            <li>Interact with a diary and painting, revealing family secrets.</li>
+                            <li>(Continuation of interaction phase).</li>
+                            <li>Confronts Elena, receives a memory chip.</li>
+                            <li>Find VR device, get into memories.</li>
+                        </ol>
+                    </div>
+                </div>
+
+                <div class="sub-header-container">
+                    <h3>02. Detail Implementation</h3>
+                </div>
+
+                <div class="tech-card">
+                    <h4>Dialogue System</h4>
+                    <p class="text-block" style="margin-bottom: 20px;">
+                        I implemented a dialogue system with a parent-child inheritance structure, which returns
+                        different texts based on the current state.
+                    </p>
+                    <div class="two-col">
+                        <div>
+                            <img src="./Asset/Project3-Memory/image 60.png" class="blueprint-img">
+                        </div>
+                        <div>
+                            <img src="./Asset/Project3-Memory/Group 3.png" class="blueprint-img">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="tech-card">
+                    <h4>Subtitle & Camera Movement</h4>
+                    <div class="two-col">
+                        <div>
+                            <p class="text-block" style="font-size: 0.95rem;">
+                                When the player reaches an interactive position, the game will automatically adjust the
+                                player's view to face an object containing key information.
+                                <br><br>
+                                For each subtitle, I have adjusted its position so that it does not obstruct the screen
+                                while maintaining variation and visual interest.
+                            </p>
+                        </div>
+                        <div>
+                            <img src="./Asset/Project3-Memory/image 9.png" class="blueprint-img"
+                                style="height: 250px; width: auto; margin: auto">
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+            <div id="Level2" class="tab-content">
+
+                <div class="sub-header-container">
+                    <h3>01. Game Flow</h3>
+                </div>
+
+                <div class="two-col">
+                    <div>
+                        <img src="./Asset/Project3-Memory/image2.png" alt="Level 2 Map" class="blueprint-img"
+                            style="border-color: var(--accent-color);">
+                    </div>
+                    <div>
+                        <h4
+                            style="color: var(--accent-color); margin-bottom: 15px; font-family: 'Orbitron', sans-serif;">
+                            The story from Leon's perspective</h4>
+                        <ol class="flow-list">
+                            <li><strong>Ring:</strong> Proposed at her exhibition. His happiest moment.</li>
+                            <li><strong>Trophy:</strong> Her success brought envy instead of joy, ending in humiliation.
+                            </li>
+                            <li><strong>Cluttered Desk:</strong> Feels unworthy of standing beside her.</li>
+                            <li><strong>Painting:</strong> Refuses to let go, longing to be with her forever.</li>
+                            <li>Move on to the next memory.</li>
+                        </ol>
+                    </div>
+                </div>
+
+                <div class="sub-header-container">
+                    <h3>02. Environmental Storytelling</h3>
+                </div>
+
+                <div class="tech-card">
+                    <h4 style="color: var(--accent-color); margin-bottom: 15px; font-family: 'Orbitron', sans-serif;">
+                        Color and Composition: Contrasting Spaces</h4>
+
+                    <div style="display: flex; gap: 30px; align-items: flex-start; flex-wrap: wrap;">
+
+                        <div style="flex: 1.4; min-width: 300px;">
+                            <img src="./Asset/Project3-Memory/image 46.png" class="blueprint-img"
+                                style="margin-top: 0; margin-bottom: 20px;">
+
+                            <p class="text-block" style="margin-bottom: 0;">
+                                The two spaces have different dominant color tones: Eloise's side is warm yellow, while
+                                Leon's side is in cool tones, reflecting their contrasting situations.
+                                At the same time, one side is tidy, while the other is messy and chaotic.
+                            </p>
+                        </div>
+
+                        <div style="flex: 1; min-width: 240px; display: flex; flex-direction: column; gap: 20px;">
+                            <img src="./Asset/Project3-Memory/image 38.png" class="blueprint-img"
+                                style="margin-top: 0;">
+                            <img src="./Asset/Project3-Memory/image 39.png" class="blueprint-img"
+                                style="margin-top: 0;">
+                        </div>
+
+                    </div>
+                </div>
+
+                <div class="tech-card">
+                    <h4 style="color: var(--accent-color); margin-bottom: 15px; font-family: 'Orbitron', sans-serif;">
+                        Rainy Atmosphere : Enhancing Mood with Weather</h4>
+
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 25px;">
+
+                        <img src="./Asset/Project3-Memory/image 40.png" class="blueprint-img"
+                            style="margin-top: 0; width: 100%; height: 250px; object-fit: cover;">
+
+                        <img src="./Asset/Project3-Memory/image 44.png" class="blueprint-img"
+                            style="margin-top: 0; width: 100%; height: 250px; object-fit: cover;">
+                    </div>
+
+                    <p class="text-block" style="margin-bottom: 0;">
+                        Set the weather to rainy using <strong>Ultra Dynamic Sky</strong>, echoing the rainy effect in
+                        part of the third scene.
+                        Set the window material to create the effect of raindrops flowing down the glass.
+                    </p>
+                </div>
+
+            </div>
+
+            <div id="Level3" class="tab-content">
+
+                <div class="sub-header-container">
+                    <h3>01. Game Flow</h3>
+                </div>
+
+                <div class="two-col">
+                    <div>
+                        <img src="./Asset/Project3-Memory/image3.png" alt="Level 3 Map" class="blueprint-img"
+                            style="border-color: var(--accent-color);">
+                    </div>
+
+                    <div>
+                        <h4
+                            style="color: var(--accent-color); margin-bottom: 15px; font-family: 'Orbitron', sans-serif;">
+                            The story from Eloise’s perspective</h4>
+
+                        <ol class="flow-list">
+                            <li><strong>Childhood:</strong> Eloise grows up under her strong mother, Celeste.</li>
+                            <li><strong>Youth:</strong> Her relationship with Leon.</li>
+                            <li><strong>The Car Accident:</strong> A tragic event that changes her life.</li>
+                            <li><strong>Depression:</strong> After losing Leon and learning she is pregnant, Eloise
+                                clings to the robot as his replacement, since it carries Leon's memory chip, but faces
+                                rejection from her mother and society.</li>
+                            <li><strong>Doubt:</strong> She wonders if having the child was love or a way to hold on to
+                                Leon.</li>
+
+                            <li>
+                                <strong>Eloise's Final Night:</strong>
+                                <div
+                                    style="margin-top: 10px; padding-left: 15px; color: #b0b0b0; font-size: 0.95rem; line-height: 1.6;">
+
+                                    <div style="margin-bottom: 8px;">
+                                        <span style="color: var(--accent-color);">•</span> <strong>Trying to Soothe the
+                                            Baby:</strong> Eloise tries to calm Lillian, but nothing helps.
+                                    </div>
+
+                                    <div style="margin-bottom: 8px;">
+                                        <span style="color: var(--accent-color);">•</span> <strong>Speaking to the
+                                            Robot:</strong> She wakes the robot, realizing Leon is truly gone.
+                                    </div>
+
+                                    <div>
+                                        <span style="color: var(--accent-color);">•</span> <strong>The Final
+                                            Goodbye:</strong> Believing the robot can be a better parent, she walks to
+                                        the window, and the game ends.
+                                    </div>
+
+                                </div>
+                            </li>
+                        </ol>
+                    </div>
+                </div>
+
+                <div class="sub-header-container">
+                    <h3>02. Environmental Storytelling</h3>
+                </div>
+
+                <div class="tech-card">
+                    <h4 style="color: var(--accent-color); margin-bottom: 15px; font-family: 'Orbitron', sans-serif;">
+                        Narrative Environment: The Life Museum</h4>
+
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 25px;">
+                        <img src="./Asset/Project3-Memory/image 49.png" class="blueprint-img"
+                            style="margin-top: 0; width: 100%; height: 250px; object-fit: cover;">
+                        <img src="./Asset/Project3-Memory/image 52.png" class="blueprint-img"
+                            style="margin-top: 0; width: 100%; height: 250px; object-fit: cover;">
+                    </div>
+
+                    <p class="text-block" style="margin-bottom: 0;">
+                        In the final level, the story will be told from Eloise's perspective. Since the timeline is
+                        long, the story will be presented as a Life Museum. Each hallway represents a stage of Eloise's
+                        life, and every object and painting symbolizes her experiences and emotions.
+                    </p>
+                </div>
+
+                <div class="tech-card">
+                    <h4 style="color: var(--accent-color); margin-bottom: 15px; font-family: 'Orbitron', sans-serif;">
+                        Color and Space: Visualizing Emotional Progression</h4>
+
+                    <div class="two-col" style="align-items: center;">
+                        <div>
+                            <img src="./Asset/Project3-Memory/Group 6.png" class="blueprint-img"
+                                style="margin-top: 0;">
+                        </div>
+
+                        <div>
+                            <p class="text-block" style="margin-bottom: 15px;">
+                                To reflect Eloise's mental state, each hallway features a distinct dominant color:
+                            </p>
+                            <ul
+                                style="list-style: none; margin-bottom: 20px; padding-left: 10px; border-left: 2px solid var(--accent-color);">
+                                <li style="margin-bottom: 8px; color: #ccc;">• Warm tones for her childhood.</li>
+                                <li style="margin-bottom: 8px; color: #ccc;">• Soft pink for her romantic years.</li>
+                                <li style="margin-bottom: 8px; color: #ccc;">• Somber blue after the car accident,
+                                    symbolizing her sorrow.</li>
+                            </ul>
+                            <p class="text-block" style="margin-bottom: 0;">
+                                Additionally, the hallways gradually narrow, creating a visual sense of Eloise's growing
+                                depression.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+        </section>
+
+        <section style="text-align: center; margin-top: 80px;">
+            <h2 class="section-title" style="text-align: left;">GALLERY</h2>
+            <div class="gallery-grid">
+                <img src="./Asset/Project3-Memory/image 9.png" style="border-radius:4px; border:1px solid #333;">
+                <img src="./Asset/Project3-Memory/image 58.png" style="border-radius:4px; border:1px solid #333;">
+                <img src="./Asset/Project3-Memory/image 59.png" style="border-radius:4px; border:1px solid #333;">
+                <img src="./Asset/Project3-Memory/image 56.png" style="border-radius:4px; border:1px solid #333;">
+            </div>
+        </section>
+
+    </div>
+
+    <footer
+        style="text-align: center; padding: 30px; border-top: var(--glass-border); color: var(--text-secondary); font-size: 0.8rem; margin-top: 50px;">
+        <p>&copy; 2025 Shutong Zhang. Built with Code & Art.</p>
+    </footer>
+
+    <script>
+        // --- BG ANIMATION ---
+        const canvas = document.getElementById('canvas-bg');
+        const ctx = canvas.getContext('2d');
+        let particlesArray;
+        canvas.width = window.innerWidth; canvas.height = window.innerHeight;
+        window.addEventListener('resize', () => { canvas.width = window.innerWidth; canvas.height = window.innerHeight; init(); });
+        class Particle {
+            constructor() {
+                this.x = Math.random() * canvas.width; this.y = Math.random() * canvas.height;
+                this.size = Math.random() * 2; this.speedX = (Math.random() * 0.2) - 0.1; this.speedY = (Math.random() * 0.2) - 0.1;
+            }
+            update() { this.x += this.speedX; this.y += this.speedY; if (this.x > canvas.width || this.x < 0) this.speedX *= -1; if (this.y > canvas.height || this.y < 0) this.speedY *= -1; }
+            draw() { ctx.fillStyle = 'rgba(0, 243, 255, 0.3)'; ctx.beginPath(); ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2); ctx.fill(); }
+        }
+        function init() { particlesArray = []; for (let i = 0; i < 60; i++) particlesArray.push(new Particle()); }
+        function animate() { ctx.clearRect(0, 0, canvas.width, canvas.height); particlesArray.forEach(p => { p.update(); p.draw(); }); requestAnimationFrame(animate); }
+        init(); animate();
+
+        // --- TAB LOGIC ---
+        function openLevel(evt, levelName) {
+            var i, tabcontent, tablinks;
+
+            // 1. Hide all tab content
+            tabcontent = document.getElementsByClassName("tab-content");
+            for (i = 0; i < tabcontent.length; i++) {
+                tabcontent[i].style.display = "none";
+                tabcontent[i].classList.remove("active");
+            }
+
+            // 2. Remove "active" class from all buttons
+            tablinks = document.getElementsByClassName("tab-btn");
+            for (i = 0; i < tablinks.length; i++) {
+                tablinks[i].className = tablinks[i].className.replace(" active", "");
+            }
+
+            // 3. Show the current tab and add "active" class to button
+            document.getElementById(levelName).style.display = "block";
+            // Small timeout to allow CSS animation to trigger if desired, or just add class
+            setTimeout(() => {
+                document.getElementById(levelName).classList.add("active");
+            }, 10);
+
+            evt.currentTarget.className += " active";
+        }
+    </script>
+</body>
+
+</html>

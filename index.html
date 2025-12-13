@@ -1,0 +1,448 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Shutong Zhang | Game Dev Portfolio</title>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Space+Grotesk:wght@300;500;700&display=swap" rel="stylesheet">
+    
+    <style>
+        /* --- CSS 变量 --- */
+        :root {
+            --bg-color: #050505;
+            --text-main: #ffffff;
+            --text-secondary: #a0a0a0;
+            --accent-color: #00f3ff;
+            --accent-hover: #bc13fe;
+            --card-bg: rgba(255, 255, 255, 0.03);
+            --module-bg: rgba(0, 0, 0, 0.3); /* 技能模块背景更深一点 */
+            --glass-border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            font-family: 'Space Grotesk', sans-serif;
+            overflow-x: hidden;
+            line-height: 1.6;
+            scroll-behavior: smooth;
+        }
+
+        h1, h2, h3, h4 {
+            font-family: 'Orbitron', sans-serif;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+        
+        /* 标题层级 */
+        h2 { font-size: 2.5rem; color: var(--accent-color); margin-bottom: 40px; }
+        h3 { font-size: 1.2rem; color: #fff; margin-bottom: 20px; border-left: 3px solid var(--accent-color); padding-left: 15px; }
+        /* 模块内的小标题 */
+        h5 { font-family: 'Orbitron', sans-serif; color: var(--text-secondary); margin-bottom: 15px; font-size: 0.85rem; letter-spacing: 1px; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 5px; display: flex; justify-content: space-between;}
+
+        a { text-decoration: none; color: inherit; transition: 0.3s; }
+
+        /* --- 背景 & 导航 --- */
+        #canvas-bg { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -1; opacity: 0.4; }
+        
+        nav {
+            position: fixed; top: 0; width: 100%; padding: 20px 50px;
+            display: flex; justify-content: space-between; align-items: center;
+            background: rgba(5, 5, 5, 0.85); backdrop-filter: blur(12px);
+            z-index: 1000; border-bottom: var(--glass-border);
+        }
+        .logo { font-size: 1.5rem; font-weight: 700; color: var(--accent-color); text-shadow: 0 0 10px rgba(0, 243, 255, 0.5); }
+        .nav-links { display: flex; gap: 30px; }
+        .nav-links a:hover { color: var(--accent-color); }
+
+        /* --- 布局容器 --- */
+        section { padding: 100px 10%; min-height: 100vh; display: flex; flex-direction: column; justify-content: center; }
+
+        /* --- Hero --- */
+        .hero h1 {
+            font-size: 3.5rem; line-height: 1.1; margin-bottom: 20px;
+            background: linear-gradient(90deg, #fff, var(--text-secondary));
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+        }
+        .hero p { font-size: 1.1rem; color: var(--text-secondary); max-width: 700px; margin-bottom: 40px; }
+        .btn {
+            padding: 12px 30px; border: 1px solid var(--accent-color); color: var(--accent-color);
+            font-family: 'Orbitron', sans-serif; font-size: 0.9rem; cursor: pointer;
+            transition: 0.4s; display: inline-block;
+        }
+        .btn:hover { background: var(--accent-color); color: #000; box-shadow: 0 0 20px var(--accent-color); }
+
+        /* --- Portfolio --- */
+        .portfolio { text-align: center; } 
+        .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(400px, 1fr)); gap: 30px; text-align: left; }
+        .card {
+            background: var(--card-bg); border: var(--glass-border); border-radius: 10px;
+            overflow: hidden; transition: 0.3s; position: relative; opacity: 0; transform: translateY(30px);
+        }
+        .card.visible { opacity: 1; transform: translateY(0); }
+        .card:hover { transform: translateY(-10px); box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5); border-color: var(--accent-color); }
+        .card-img { width: 100%; height: 200px; object-fit: cover; transition: 0.5s; }
+        .card-content { padding: 20px; }
+        .tags span { font-size: 0.8rem; background: rgba(0, 243, 255, 0.1); color: var(--accent-color); padding: 4px 8px; border-radius: 4px; margin-right: 5px; }
+
+        /* --- About & Skills 核心布局 --- */
+        .about-layout {
+            display: grid;
+            grid-template-columns: 1.4fr 0.6fr; /* 左宽右窄 */
+            gap: 60px;
+            align-items: start;
+        }
+
+        .left-col { display: flex; flex-direction: column; gap: 50px; }
+
+        /* --- 嵌套的 4 格技能网格 --- */
+        .nested-skill-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr; /* 2列布局 */
+            gap: 20px;
+        }
+
+        .skill-module {
+            background: var(--module-bg);
+            border: var(--glass-border);
+            padding: 20px;
+            border-radius: 8px;
+            transition: 0.3s;
+            position: relative;
+        }
+
+        .skill-module:hover {
+            border-color: rgba(0, 243, 255, 0.3);
+            background: rgba(255, 255, 255, 0.05);
+            transform: translateY(-3px);
+        }
+
+        /* 技能条样式 (Programming & Engine) */
+        .mini-bar-row { display: flex; align-items: center; justify-content: space-between; margin-bottom: 8px; font-size: 0.85rem; color: #ccc; }
+        .mini-track { width: 60px; height: 3px; background: rgba(255,255,255,0.1); border-radius: 2px; overflow: hidden; }
+        .mini-fill { height: 100%; background: var(--accent-color); box-shadow: 0 0 5px var(--accent-color); }
+
+        /* 标签样式 (Tools & Other) */
+        .module-tags { display: flex; flex-wrap: wrap; gap: 6px; }
+        .module-tag {
+            font-size: 0.75rem;
+            color: #aaa;
+            border: 1px solid rgba(255,255,255,0.05);
+            padding: 3px 8px;
+            border-radius: 4px;
+            background: rgba(0,0,0,0.2);
+        }
+
+        /* --- 课程标签 --- */
+        .course-list { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 10px; }
+        .course-tag { font-size: 0.8rem; color: #ccc; border: 1px solid #333; padding: 2px 8px; border-radius: 4px; }
+
+        /* --- 右侧 Contact (Sticky) --- */
+        .right-col {
+            position: sticky; top: 100px;
+            background: var(--card-bg); padding: 30px;
+            border-radius: 12px; border: var(--glass-border);
+        }
+
+        /* --- 响应式 --- */
+        @media (max-width: 900px) {
+            .about-layout { grid-template-columns: 1fr; }
+            .nested-skill-grid { grid-template-columns: 1fr; } /* 手机端变成单列 */
+            .right-col { position: static; margin-top: 40px; }
+            nav { padding: 20px; }
+            .hero h1 { font-size: 2.5rem; }
+        }
+    </style>
+</head>
+<body>
+
+    <canvas id="canvas-bg"></canvas>
+
+    <nav>
+        <div class="logo">SHUTONG Z.</div>
+        <div class="nav-links">
+            <a href="#home">Home</a>
+            <a href="#portfolio">Projects</a>
+            <a href="#about">About</a>
+        </div>
+    </nav>
+
+    <section id="home" class="hero">
+        <h1>Hello, <br> I'm Shutong Zhang.</h1>
+        <p>
+            A <span style="color:#fff;">Computer Science</span> student at <span style="color:#fff;">New York University</span> with a minor in <span style="color:#fff;">Game Design</span>.
+            My academic background has provided me with a strong foundation in <span style="color:#fff;">Programming, Algorithms, Computer Graphics, and Machine Learning</span>, which I integrate into my passion for game development.
+            <br><br>
+            I am especially interested in how technical knowledge can support creative design, allowing me to build games that are both systematically robust and expressively engaging.
+        </p>
+        <div style="display: flex; gap: 20px;">
+            <a href="#portfolio" class="btn">View Projects</a>
+            <a href="#" class="btn" style="border-color: var(--text-secondary); color: var(--text-secondary);">Download CV</a>
+        </div>
+    </section>
+
+    <section id="portfolio" class="portfolio">
+        <h2>GAME PROJECTS</h2>
+        <div class="grid">
+            <div class="card scroll-reveal">
+                <a href="project.html" style="text-decoration: none; color: inherit; display: block;">
+                    <img src="./Asset/Project1-Coloring/Coloring_fengmian.png" alt="Game 1" class="card-img">
+                    <div class="card-content">
+                        <h3>COLORING</h3>
+                        <p style="color: #ccc; font-size: 0.9rem; margin-bottom: 15px;">An exploration-based Metroidvania game where players repaint the environment to gain new abilities and solve puzzles.</p>
+                        <div class="tags"><span>Unity</span><span>2D</span><span>Metroidvania Game</span><span>Solo Dev</span></div>
+                    </div>
+                </a>
+            </div>
+            <div class="card scroll-reveal">
+                <a href="project2.html" style="text-decoration: none; color: inherit; display: block;">
+                    <img src="./Asset/Project2-404/404_fengmian.png" alt="Game 2" class="card-img">
+                    <div class="card-content">
+                        <h3>404 NOT FOUND</h3>
+                        <p style="color: #ccc; font-size: 0.9rem; margin-bottom: 15px;">An experimental puzzle game that reinterprets the word search format through meta-narrative design and rule-breaking gameplay.</p>
+                        <div class="tags"><span>Unity</span><span>2D</span><span>Puzzle Game</span><span>Solo Dev</span></div>
+                    </div>
+                </a>
+            </div>
+            <div class="card scroll-reveal">
+                <a href="project3.html" style="text-decoration: none; color: inherit; display: block;">
+                    <img src="./Asset/Project3-Memory/Memory_fengmian.png" alt="Game 3" class="card-img">
+                    <div class="card-content">
+                        <h3>MECHANICAL MEMORY</h3>
+                        <p style="color: #ccc; font-size: 0.9rem; margin-bottom: 15px;">A first-person narrative game where players explore different people's memories to uncover the story.</p>
+                        <div class="tags"><span>Unreal</span><span>3D</span><span>Narrative Game</span><span>Solo Dev</span></div>
+                    </div>
+                </a>
+            </div>
+            <div class="card scroll-reveal">
+                <a href="project4.html" style="text-decoration: none; color: inherit; display: block;">
+                    <img src="./Asset/Project4-Bluff/Bluff_fengmian.png" alt="Game 4" class="card-img">
+                    <div class="card-content">
+                        <h3>BLUFF & BLADE</h3>
+                        <p style="color: #ccc; font-size: 0.9rem; margin-bottom: 15px;">A psychological card duel where bluffing and insight decide victory, featuring an AI-controlled opponent for solo play.</p>
+                        <div class="tags"><span>GameMaker</span><span>2D</span><span>Card Game</span><span>Solo Dev</span><span>Coursework</span></div>
+                    </div>
+                </a>
+            </div>
+            <div class="card scroll-reveal">
+                <a href="project5.html" style="text-decoration: none; color: inherit; display: block;">
+                    <img src="./Asset/Project5-Bubble/Bubble_fengmian.png" alt="Game 5" class="card-img">
+                    <div class="card-content">
+                        <h3>BUPUDA</h3>
+                        <p style="color: #ccc; font-size: 0.9rem; margin-bottom: 15px;">A physics-based 2D game controlled by real breathing input through a humidity sensor.</p>
+                        <div class="tags"><span>Unity</span><span>2D</span><span>Physical Interaction</span><span>Collaboration</span><br><span>Game Jam</span></div>
+                    </div>
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <section id="about">
+        <div class="about-layout">
+            
+            <div class="left-col">
+                
+                <div class="info-block scroll-reveal">
+                    <h2>About Me</h2>
+                    <h3>EDUCATION</h3>
+                    <div style="margin-bottom: 20px;">
+                        <span style="font-size: 1.1rem; color: #fff; font-weight: bold;">New York University</span>
+                        <div style="color: var(--accent-color); font-size: 0.9rem;">BS in Computer Science, Minor in Game Design</div>
+                        <div style="color: var(--text-secondary); font-size: 0.9rem;">GPA: <span style="color:#fff;">3.85 / 4.0</span></div>
+                    </div>
+                    <h5 style="border:none; margin-bottom:5px;">Relevant Coursework</h5>
+                    <div class="course-list">
+                        <span class="course-tag">Algorithms</span>
+                        <span class="course-tag">OS</span>
+                        <span class="course-tag">Computer Graphics</span>
+                        <span class="course-tag">Machine Learning</span>
+                        <span class="course-tag">Cryptography</span>
+                        <span class="course-tag">Game Design</span>
+                        <span class="course-tag">Game Dev</span>
+                        <span class="course-tag">Data Science</span>
+                        <span class="course-tag">Psychology</span>
+                    </div>
+                </div>
+
+                <div class="info-block scroll-reveal">
+                    <h3>TECHNICAL SKILLS</h3>
+                    
+                    <div class="nested-skill-grid">
+                        
+                        <div class="skill-module">
+                            <h5>PROGRAMMING <span>&lt;/&gt;</span></h5>
+                            <div class="mini-bar-row">
+                                <span>Python</span>
+                                <div class="mini-track"><div class="mini-fill" style="width: 80%;"></div></div>
+                            </div>
+                            <div class="mini-bar-row">
+                                <span>JavaScript</span>
+                                <div class="mini-track"><div class="mini-fill" style="width: 75%;"></div></div>
+                            </div>
+                            <div class="mini-bar-row">
+                                <span>Java / C#</span>
+                                <div class="mini-track"><div class="mini-fill" style="width: 70%;"></div></div>
+                            </div>
+                            <div class="mini-bar-row">
+                                <span>C / C++</span>
+                                <div class="mini-track"><div class="mini-fill" style="width: 55%;"></div></div>
+                            </div>
+                        </div>
+
+                        <div class="skill-module">
+                            <h5>GAME ENGINE <span>⚙</span></h5>
+                            <div class="mini-bar-row">
+                                <span>Unity</span>
+                                <div class="mini-track"><div class="mini-fill" style="width: 80%;"></div></div>
+                            </div>
+                            <div class="mini-bar-row">
+                                <span>Unreal Engine</span>
+                                <div class="mini-track"><div class="mini-fill" style="width: 65%;"></div></div>
+                            </div>
+                            <div class="mini-bar-row">
+                                <span>GameMaker</span>
+                                <div class="mini-track"><div class="mini-fill" style="width: 85%;"></div></div>
+                            </div>
+                        </div>
+
+                        <div class="skill-module">
+                            <h5>TOOLS <span>🛠</span></h5>
+                            <div class="module-tags">
+                                <span class="module-tag">GitHub</span>
+                                <span class="module-tag">Blender</span>
+                                <span class="module-tag">Figma</span>
+                                <span class="module-tag">Overleaf (LaTeX)</span>
+                                <span class="module-tag">Notion</span>
+                            </div>
+                        </div>
+
+                        <div class="skill-module">
+                            <h5>DATA & OTHERS <span>📈</span></h5>
+                            <div class="module-tags">
+                                <span class="module-tag">Machine Learning</span>
+                                <span class="module-tag">Data Visualization</span>
+                                <span class="module-tag">SQL</span>
+                                <span class="module-tag">Statistical Analysis</span>
+                                <span class="module-tag">Project Management</span>
+                                <span class="module-tag">Collaboration</span>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+
+            <div class="right-col scroll-reveal">
+                <h3>CONTACT</h3>
+
+                <div style="display: flex; flex-direction: column; gap: 15px; margin-bottom: 30px;">
+                    <a href="mailto:sz3832@nyu.edu" style="display: flex; align-items: center; gap: 10px; color: #fff;">
+                        <span style="color: var(--accent-color);">✉</span> sz3832@nyu.edu
+                    </a>
+                    <a href="mailto:zhangshutong2016@126.com" style="display: flex; align-items: center; gap: 10px; color: #fff;">
+                        <span style="color: var(--accent-color);">✉</span> zhangshutong...
+                    </a>
+                    <div style="display: flex; align-items: center; gap: 10px; color: var(--text-secondary); font-size: 0.85rem;">
+                        <span style="color: var(--accent-color);">📞</span> +1 646-387-0806
+                    </div>
+                    <div style="display: flex; align-items: center; gap: 10px; color: var(--text-secondary); font-size: 0.85rem;">
+                        <span style="color: var(--accent-color);">📞</span> +86 159-0113-6233
+                    </div>
+                </div>
+
+                <div style="display: flex; gap: 10px; flex-wrap: wrap;">
+                    <a href="https://github.com/ShutongZhang2023" target="_blank" class="module-tag" style="text-align:center; flex:1; cursor:pointer; font-size:0.85rem; color:#fff;">
+                        GitHub
+                    </a>
+                    <a href="https://shellyzhang.itch.io/" target="_blank" class="module-tag" style="text-align:center; flex:1; cursor:pointer; font-size:0.85rem; color:#fff;">
+                        Itch.io
+                    </a>
+                </div>
+            </div>
+
+        </div>
+    </section>
+
+    <footer style="text-align: center; padding: 20px; border-top: var(--glass-border); color: var(--text-secondary); font-size: 0.8rem;">
+        <p>&copy; 2024 Shutong Zhang. All Rights Reserved.</p>
+    </footer>
+
+    <script>
+        const canvas = document.getElementById('canvas-bg');
+        const ctx = canvas.getContext('2d');
+        let particlesArray;
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+
+        window.addEventListener('resize', () => {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+            init();
+        });
+
+        class Particle {
+            constructor() {
+                this.x = Math.random() * canvas.width;
+                this.y = Math.random() * canvas.height;
+                this.directionX = (Math.random() * 0.4) - 0.2;
+                this.directionY = (Math.random() * 0.4) - 0.2;
+                this.size = Math.random() * 2;
+            }
+            update() {
+                if (this.x > canvas.width || this.x < 0) this.directionX = -this.directionX;
+                if (this.y > canvas.height || this.y < 0) this.directionY = -this.directionY;
+                this.x += this.directionX;
+                this.y += this.directionY;
+            }
+            draw() {
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+                ctx.fillStyle = 'rgba(0, 243, 255, 0.5)';
+                ctx.fill();
+            }
+        }
+
+        function init() {
+            particlesArray = [];
+            let numberOfParticles = (canvas.height * canvas.width) / 9000;
+            for (let i = 0; i < numberOfParticles; i++) {
+                particlesArray.push(new Particle());
+            }
+        }
+
+        function animate() {
+            requestAnimationFrame(animate);
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            for (let i = 0; i < particlesArray.length; i++) {
+                particlesArray[i].update();
+                particlesArray[i].draw();
+                for (let j = i; j < particlesArray.length; j++) {
+                    const dx = particlesArray[i].x - particlesArray[j].x;
+                    const dy = particlesArray[i].y - particlesArray[j].y;
+                    const distance = Math.sqrt(dx * dx + dy * dy);
+                    if (distance < 100) {
+                        ctx.beginPath();
+                        ctx.strokeStyle = `rgba(0, 243, 255, ${1 - distance/100})`;
+                        ctx.lineWidth = 0.5;
+                        ctx.moveTo(particlesArray[i].x, particlesArray[i].y);
+                        ctx.lineTo(particlesArray[j].x, particlesArray[j].y);
+                        ctx.stroke();
+                    }
+                }
+            }
+        }
+
+        init();
+        animate();
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) entry.target.classList.add('visible');
+            });
+        }, { threshold: 0.1 });
+
+        document.querySelectorAll('.scroll-reveal').forEach(el => observer.observe(el));
+    </script>
+</body>
+</html>

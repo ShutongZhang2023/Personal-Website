@@ -1,0 +1,661 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PROJECT: 404 NOT FOUND | Portfolio</title>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Space+Grotesk:wght@300;500;700&family=Fira+Code:wght@400&display=swap"
+        rel="stylesheet">
+
+    <style>
+        /* --- 1. GLOBAL VARIABLES --- */
+        :root {
+            --bg-color: #050505;
+            --text-main: #ffffff;
+            --text-secondary: #b0b0b0;
+            --accent-color: #00f3ff;
+            --accent-hover: #bc13fe;
+            --card-bg: rgba(255, 255, 255, 0.03);
+            --glass-border: 1px solid rgba(255, 255, 255, 0.1);
+            --code-bg: #0d0d0d;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            font-family: 'Space Grotesk', sans-serif;
+            overflow-x: hidden;
+            line-height: 1.8;
+        }
+
+        h1,
+        h2,
+        h3,
+        h4 {
+            font-family: 'Orbitron', sans-serif;
+            letter-spacing: 1px;
+        }
+
+        a {
+            text-decoration: none;
+            color: inherit;
+            transition: 0.3s;
+        }
+
+        img {
+            display: block;
+            max-width: 100%;
+            height: auto;
+        }
+
+        /* --- 2. BACKGROUND --- */
+        #canvas-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            opacity: 0.3;
+        }
+
+        /* --- 3. NAVIGATION --- */
+        .top-bar {
+            padding: 20px 50px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: var(--glass-border);
+            backdrop-filter: blur(10px);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            background: rgba(5, 5, 5, 0.9);
+        }
+
+        .back-link {
+            color: var(--text-secondary);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-family: 'Orbitron', sans-serif;
+            font-size: 0.9rem;
+        }
+
+        .back-link:hover {
+            color: var(--accent-color);
+            transform: translateX(-5px);
+        }
+
+        /* --- 4. HERO SECTION (Cover) --- */
+        .project-hero {
+            height: 70vh;
+            position: relative;
+            display: flex;
+            align-items: flex-end;
+            justify-content: center;
+            padding-bottom: 80px;
+            background: url('./Asset/Project4-Bluff/Bluff_fengmian.png') center/cover no-repeat;
+        }
+
+        .project-hero::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(0deg, var(--bg-color) 0%, rgba(5, 5, 5, 0.5) 60%, transparent 100%);
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 2;
+            text-align: center;
+            max-width: 900px;
+        }
+
+        .hero-content h1 {
+            font-size: 4.5rem;
+            text-transform: uppercase;
+            margin-bottom: 10px;
+            text-shadow: 0 0 40px rgba(0, 243, 255, 0.4);
+        }
+
+        .hero-tags {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .hero-tags span {
+            background: var(--accent-color);
+            color: #000;
+            padding: 6px 14px;
+            font-weight: 700;
+            font-size: 0.8rem;
+            text-transform: uppercase;
+        }
+
+        /* --- 5. MAIN CONTAINER (Single Column) --- */
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 0 20px 100px;
+            position: relative;
+            margin-top: -60px;
+            z-index: 3;
+        }
+
+        /* --- 6. OVERVIEW DATA BAR --- */
+        .data-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            background: rgba(10, 10, 10, 0.9);
+            border: 1px solid var(--accent-color);
+            border-radius: 8px;
+            padding: 25px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
+            margin-bottom: 60px;
+            backdrop-filter: blur(10px);
+        }
+
+        .data-item {
+            text-align: center;
+            border-right: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .data-item:last-child {
+            border-right: none;
+        }
+
+        .data-label {
+            display: block;
+            font-size: 0.75rem;
+            color: var(--text-secondary);
+            margin-bottom: 5px;
+            font-family: 'Orbitron', sans-serif;
+            letter-spacing: 1px;
+        }
+
+        .data-value {
+            display: block;
+            font-size: 1rem;
+            font-weight: 700;
+            color: #fff;
+        }
+
+        /* --- 7. VIDEO SECTION --- */
+        .video-wrapper {
+            width: 100%;
+            padding-bottom: 56.25%;
+            /* 16:9 */
+            background: #000;
+            border: var(--glass-border);
+            border-radius: 8px;
+            position: relative;
+            overflow: hidden;
+            margin-bottom: 80px;
+            box-shadow: 0 0 30px rgba(0, 0, 0, 0.3);
+        }
+
+        .video-wrapper iframe {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            border: none;
+        }
+
+        .btn-center {
+            display: inline-block;
+            padding: 15px 40px;
+            border: 1px solid var(--accent-color);
+            color: var(--accent-color);
+            font-family: 'Orbitron', sans-serif;
+            text-transform: uppercase;
+            margin-top: 50px;
+            transition: 0.3s;
+        }
+
+        .btn-center:hover {
+            background: var(--accent-color);
+            color: #000;
+            box-shadow: 0 0 20px var(--accent-color);
+        }
+
+        /* --- 8. CONTENT BLOCKS --- */
+        .section-title {
+            font-size: 1.8rem;
+            color: var(--accent-color);
+            margin-bottom: 30px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            padding-bottom: 10px;
+            margin-top: 60px;
+        }
+
+        .text-block {
+            font-size: 1.1rem;
+            color: #ccc;
+            margin-bottom: 40px;
+            text-align: justify;
+        }
+
+        @media (max-width: 768px) {
+            .project-hero h1 {
+                font-size: 3rem;
+            }
+
+            .data-grid {
+                grid-template-columns: 1fr 1fr;
+                gap: 20px;
+            }
+
+            .data-item {
+                border-right: none;
+            }
+
+            .container {
+                padding: 0 20px 60px;
+            }
+        }
+
+        .design-subsection {
+            margin-bottom: 60px;
+        }
+
+        .design-subsection h3 {
+            color: #fff;
+            margin-bottom: 15px;
+            font-size: 1.3rem;
+            border-left: 4px solid var(--accent-color);
+            padding-left: 15px;
+        }
+    </style>
+</head>
+
+<body>
+
+    <canvas id="canvas-bg"></canvas>
+
+    <div class="top-bar">
+        <a href="index.html" class="back-link"><span>&lt; // HOME</span></a>
+        <div style="color: var(--accent-color); font-weight: 700;">DEV_LOG::BLUFF & BLADE</div>
+    </div>
+
+    <header class="project-hero">
+        <div class="hero-content">
+            <div class="hero-tags">
+                <span>Information Entropy</span>
+                <span>Card Game</span>
+            </div>
+            <h1>BLUFF & BLADE</h1>
+        </div>
+    </header>
+
+    <div class="container">
+
+        <div class="data-grid">
+            <div class="data-item">
+                <span class="data-label">ENGINE</span>
+                <span class="data-value">Unity 2022</span>
+            </div>
+            <div class="data-item">
+                <span class="data-label">ROLE</span>
+                <span class="data-value">Solo Developer</span>
+            </div>
+            <div class="data-item">
+                <span class="data-label">LANGUAGE</span>
+                <span class="data-value">C#</span>
+            </div>
+            <div class="data-item">
+                <span class="data-label">TIMELINE</span>
+                <span class="data-value">Apr - May 2025</span>
+            </div>
+        </div>
+
+
+        <section style="text-align: center; margin-top: 80px;">
+
+            <div style="display: flex; justify-content: center; gap: 20px; flex-wrap: wrap; margin-top: 50px;">
+                <a href="./Asset/Project4-Bluff/Portfolio_Final_Final_16-17.pdf" download class="btn-center"
+                    style="margin-top: 0;">
+                    Download Design Document (PDF)
+                </a>
+
+                <a href="https://shellyzhang.itch.io/fi" class="btn-center" style="margin-top: 0;">
+                    Play the Game
+                </a>
+            </div>
+
+            <div style="display: flex; justify-content: center; gap: 20px; flex-wrap: wrap; margin-top: 30px;">
+                <a href="https://github.com/ShutongZhang2023/Intro-to-Game-Development---Final-Project"
+                    style="color: var(--text-secondary); font-size: 0.9rem; border-bottom: 1px solid #555;">
+                    View Source Code on GitHub
+                </a>
+            </div>
+
+        </section>
+
+        <section>
+            <h2 class="section-title">OVERVIEW</h2>
+            <p class="text-block">
+                Bluff & Blade is a turn-based psychological card duel built on bluffing, resource
+                management, and information control. The project began as a simple Rock-Paper-Scissors
+                assignment and evolved into a system inspired by the idea of information entropy, exploring
+                uncertainty. Each round, players and an AI opponent take turns attacking and defending while
+                managing limited resources called Will. Success depends on how well players control information by
+                hiding their own Will and estimating the opponent's to gain the upper hand.
+            </p>
+        </section>
+
+        <section>
+            <h2 class="section-title">DESIGN</h2>
+
+            <div class="design-subsection" style="text-align: left; color: #fff;">
+                <h3 style="border-left: 4px solid #00f0ff; padding-left: 10px; margin-bottom: 15px;">Card and Resource
+                    System</h3>
+
+                <p class="text-block">
+                    Each player begins the game with a fixed hand of <strong>six cards</strong> and <strong>two action
+                        buttons</strong> (Insight and Skip).
+                    All actions—playing cards or using the Insight button—consume a shared resource called
+                    <strong>Will</strong>.
+                    Players start the game with <strong>3 Will</strong>, and at the beginning of each turn, they gain
+                    <strong>+2 Will</strong>, up to a <strong>maximum of 5</strong>.
+                </p>
+
+                <div style="overflow-x: auto;">
+                    <table
+                        style="width: 100%; border-collapse: collapse; margin-bottom: 20px; font-size: 0.9em; border: 1px solid #444;">
+                        <thead>
+                            <tr style="background-color: rgba(255, 255, 255, 0.1); text-align: left;">
+                                <th style="padding: 10px; border-bottom: 1px solid #444;">Card Type</th>
+                                <th style="padding: 10px; border-bottom: 1px solid #444;">Effect</th>
+                                <th style="padding: 10px; border-bottom: 1px solid #444;">Cost (/will)</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td style="padding: 10px; border-bottom: 1px solid #444;">Attack</td>
+                                <td style="padding: 10px; border-bottom: 1px solid #444;">Deals 2 damage</td>
+                                <td style="padding: 10px; border-bottom: 1px solid #444;">3</td>
+                            </tr>
+                            <tr>
+                                <td style="padding: 10px; border-bottom: 1px solid #444;">Bluff Attack</td>
+                                <td style="padding: 10px; border-bottom: 1px solid #444;">
+                                    Unexposed: acts as a normal Attack (2 damage)<br>
+                                    Exposed by button: 1 damage<br>
+                                    Exposed by a card: attacker takes 2 reflected damage, defender takes none
+                                </td>
+                                <td style="padding: 10px; border-bottom: 1px solid #444;">2</td>
+                            </tr>
+                            <tr>
+                                <td style="padding: 10px; border-bottom: 1px solid #444;">Defend</td>
+                                <td style="padding: 10px; border-bottom: 1px solid #444;">Blocks 2 damage</td>
+                                <td style="padding: 10px; border-bottom: 1px solid #444;">2</td>
+                            </tr>
+                            <tr>
+                                <td style="padding: 10px; border-bottom: 1px solid #444;">Bluff Defend</td>
+                                <td style="padding: 10px; border-bottom: 1px solid #444;">
+                                    Unexposed: blocks 2 damage<br>
+                                    Exposed by button: blocks only 1 damage
+                                </td>
+                                <td style="padding: 10px; border-bottom: 1px solid #444;">1</td>
+                            </tr>
+                            <tr>
+                                <td style="padding: 10px; border-bottom: 1px solid #444;">Weak Defend</td>
+                                <td style="padding: 10px; border-bottom: 1px solid #444;">Blocks 1 damage</td>
+                                <td style="padding: 10px; border-bottom: 1px solid #444;">0</td>
+                            </tr>
+                            <tr>
+                                <td style="padding: 10px; border-bottom: 1px solid #444;">Insight (card)</td>
+                                <td style="padding: 10px; border-bottom: 1px solid #444;">
+                                    Can only be used when defending<br>
+                                    If the opponent plays Bluff Attack: reflects 2 damage and blocks all damage
+                                </td>
+                                <td style="padding: 10px; border-bottom: 1px solid #444;">2</td>
+                            </tr>
+                            <tr>
+                                <td style="padding: 10px; border-bottom: 1px solid #444;">Insight (Button)</td>
+                                <td style="padding: 10px; border-bottom: 1px solid #444;">
+                                    Challenges the opponent’s card authenticity and weakens exposed bluff cards<br>
+                                    Cannot be used with Insight card in same turn
+                                </td>
+                                <td style="padding: 10px; border-bottom: 1px solid #444;">1</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <p class="text-block">
+                    Bluff cards cost less Will, letting players appear threatening while conserving resources. Insight,
+                    on the other hand, provides information at a cost.
+                </p>
+            </div>
+
+            <div class="design-subsection" style="text-align: left; color: #fff; margin-top: 30px;">
+                <h3 style="border-left: 4px solid #00f0ff; padding-left: 10px; margin-bottom: 25px;">Visual Design</h3>
+
+                <div style="display: flex; flex-wrap: wrap; gap: 40px; align-items: flex-start;">
+
+                    <div style="flex: 1; min-width: 250px; max-width: 35%;">
+                        <img src="./Asset/Project4-Bluff/Group 34.png" alt="Card Structure Diagram"
+                            style="width: 100%; height: auto; border-radius: 8px; border: 1px solid rgba(255, 255, 255, 0.1);">
+                    </div>
+
+                    <div style="flex: 2; min-width: 300px;">
+
+                        <div class="text-block" style="line-height: 1.6; font-size: 0.95em; margin-bottom: 30px;">
+                            <h4 style="margin-top: 0; margin-bottom: 15px; color: #ccc; font-size: 1.1em;">Component:
+                            </h4>
+                            <ul style="padding-left: 20px; color: #ddd; margin: 0;">
+                                <li style="margin-bottom: 12px;">
+                                    <strong>Will Cost:</strong> The resource required to play the card.
+                                </li>
+                                <li style="margin-bottom: 12px;">
+                                    <strong>Main Description:</strong> Shows the card's primary effect. When hovering, a
+                                    detailed illustration appear.
+                                </li>
+                                <li style="margin-bottom: 12px;">
+                                    <strong>Card Type:</strong> Displays whether the card is real or bluff.
+                                    <ul
+                                        style="margin-top: 8px; list-style-type: circle; color: #aaa; padding-left: 20px;">
+                                        <li style="margin-bottom: 6px;">If the player plays a real card, both players
+                                            see the same card.</li>
+                                        <li>If it's a bluff, the opponent sees the disguised version.</li>
+                                    </ul>
+                                </li>
+                            </ul>
+                        </div>
+
+                        <div
+                            style="background: rgba(255, 255, 255, 0.05); padding: 15px; border-radius: 8px; border: 1px solid #444;">
+                            <img src="./Asset/Project4-Bluff/Group 83.png" alt="Player View vs Opponent View"
+                                style="width: 70%; height: auto; display: block; margin: 0 auto;">
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="design-subsection" style="text-align: left; color: #fff; margin-top: 30px;">
+                <h3 style="border-left: 4px solid #00f0ff; padding-left: 10px; margin-bottom: 25px;">Game Flow</h3>
+                <img src="./Asset/Project4-Bluff/Group 74.png"
+                    style="width: 80%; height: auto; border-radius: 8px; border: 1px solid rgba(255, 255, 255, 0.1); margin: 0 auto;">
+                <ul style="padding-left: 20px; color: #ddd; margin: 0; margin-top: 20px;">
+                    <li style="margin-bottom: 12px;" class="text-block">
+                        Each round follows a turn loop where both the attacker and defender can choose to bluff their
+                        actions.
+                    </li>
+                    <li style="margin-bottom: 12px;" class="text-block">
+                        The defender can use Insight after the attack is declared, and the attacker can use Insight
+                        after the defence is played.
+                    </li>
+                    <li style="margin-bottom: 12px;" class="text-block">
+                        Players may skip their action to save Will.
+                    </li>
+                    <li style="margin-bottom: 12px;" class="text-block">
+                        The game ends when a player's HP reaches 0, at which point the other player wins.
+                    </li>
+                </ul>
+            </div>
+        </section>
+
+        <div class="design-subsection" style="text-align: left; color: #fff; margin-top: 30px;">
+            <h3 style="border-left: 4px solid #00f0ff; padding-left: 10px; margin-bottom: 25px;">Information and
+                Bluffing</h3>
+
+            <div class="text-block" style="line-height: 1.6; font-size: 0.95em;">
+
+                <div style="margin-bottom: 25px;">
+                    <h4 style="margin: 0 0 8px 0; color: #00f0ff; font-size: 1.1em;">Information control is key.</h4>
+                    <p style="margin: 0; color: #ddd;" class="text-block">
+                        Throughout the match, players constantly estimate the opponent's Will. Accurate calculation can
+                        eliminate certain plays (e.g., knowing they can't afford a real attack). Insight makes that
+                        estimate more accurate, while bluffing keeps it uncertain.
+                    </p>
+                </div>
+
+                <div style="margin-bottom: 25px;">
+                    <h4 style="margin: 0 0 8px 0; color: #00f0ff; font-size: 1.1em;">Insight provides information.</h4>
+                    <p style="margin: 0; color: #ddd;" class="text-block">
+                        It reveals the opponent's real card and the actual Will cost. This makes their resource state
+                        more predictable and narrows the range of possible actions in future turns.
+                    </p>
+                </div>
+
+                <div style="margin-bottom: 10px;">
+                    <h4 style="margin: 0 0 8px 0; color: #00f0ff; font-size: 1.1em;">Bluff creates uncertainty.</h4>
+                    <p style="margin: 0; color: #ddd;" class="text-block">
+                        Bluff cards look like real cards from the opponent's perspective but cost less Will. This makes
+                        it harder to infer their remaining resources accurately and keeps their future options
+                        ambiguous.
+                    </p>
+                </div>
+
+            </div>
+        </div>
+        </section>
+
+        <section style="margin-top: 80px;">
+            <h2 class="section-title">TECHNICAL IMPLEMENTATION</h2>
+
+            <div class="design-subsection" style="text-align: left; color: #fff;">
+                <h3 style="border-left: 4px solid #00f0ff; padding-left: 10px; margin-bottom: 20px;">AI Logic</h3>
+
+                <p style="margin-bottom: 30px; color: #ddd; font-style: italic;">
+                    This game includes a simple but functional AI opponent.
+                </p>
+
+                <div style="margin-bottom: 50px;">
+                    <h4 style="color: #00f0ff; margin-bottom: 15px; font-size: 1.2em;">As Attacker</h4>
+
+                    <div style="display: flex; gap: 20px; margin-bottom: 20px; flex-wrap: wrap;">
+                        <div
+                            style="flex: 1; min-width: 250px; background: rgba(0,0,0,0.3); border: 1px dashed #666; border-radius: 8px; padding: 10px; display: flex; align-items: center; justify-content: center;">
+                            <img src="./Asset/Project4-Bluff/Blank diagram 1.png" alt="Attacker AI Code Snippet"
+                                style="max-height: 250px; width: auto; max-width: 100%; object-fit: contain; display: block; opacity: 0.8;">
+                        </div>
+
+                        <div
+                            style="flex: 1; min-width: 250px; background: rgba(0,0,0,0.3); border: 1px dashed #666; border-radius: 8px; padding: 10px; display: flex; align-items: center; justify-content: center;">
+                            <img src="./Asset/Project4-Bluff/image.png" alt="Attacker AI Flowchart"
+                                style="max-height: 250px; width: auto; max-width: 100%; object-fit: contain; display: block; opacity: 0.8;">
+                        </div>
+                    </div>
+
+                    <div class="text-block">
+                        <p style="margin: 0; color: #ddd; line-height: 1.6; " class="text-block">
+                            As the attacker, the AI evaluates its current Will and uses randomization to decide between
+                            skipping, bluffing, or playing a real attack.
+                        </p>
+                    </div>
+                </div>
+
+                <div style="margin-bottom: 30px;">
+                    <h4 style="color: #00f0ff; margin-bottom: 15px; font-size: 1.2em;">As Defender</h4>
+
+                    <div style="display: flex; gap: 40px; flex-wrap: wrap; align-items: flex-start;">
+                        <div style="flex: 1; min-width: 300px;">
+                            <div
+                                style="background: rgba(0,0,0,0.3); border: 1px dashed #666; border-radius: 8px; padding: 10px;">
+                                <img src="./Asset/Project4-Bluff/Blank diagram (4) 1.png" alt="Defender AI Flowchart"
+                                    style="width: 100%; height: auto; display: block;">
+                            </div>
+                        </div>
+
+                        <div style="flex: 1; min-width: 300px;">
+                            <ul style="color: #ddd; line-height: 1.6; padding-left: 20px; margin-top: 0;">
+                                <li style="margin-bottom: 12px;">
+                                    The AI continuously maintains a list of possible player Will values throughout the
+                                    match.
+                                </li>
+                                <li style="margin-bottom: 12px;">
+                                    At the start of each decision, it calculates the expected player Will based on this
+                                    list.
+                                </li>
+                                <li style="margin-bottom: 12px;">
+                                    If the expected Will is high enough (e.g., ≥ 3), the AI assumes the player may
+                                    perform a strong attack and is more likely to use Insight or play a real defend.
+                                </li>
+                                <li style="margin-bottom: 12px;">
+                                    If its current Will is low, the AI may bluff or save its own resources.
+                                </li>
+                                <li>
+                                    Randomized choices (50%) are introduced in several branches to make the AI less
+                                    predictable and to mimic human uncertainty.
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section style="text-align: center; margin-top: 80px;">
+            <h2 class="section-title" style="text-align: left;">GALLERY</h2>
+            <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 20px; margin-bottom: 40px;">
+                <img src="./Asset/Project4-Bluff/image 62.png" style="border-radius:4px; border:1px solid #333;">
+                <img src="./Asset/Project4-Bluff/image 63.png" style="border-radius:4px; border:1px solid #333;">
+                <img src="./Asset/Project4-Bluff/image 64.png" style="border-radius:4px; border:1px solid #333;">
+            </div>
+        </section>
+
+    </div>
+
+    <footer
+        style="text-align: center; padding: 30px; border-top: var(--glass-border); color: var(--text-secondary); font-size: 0.8rem; margin-top: 50px;">
+        <p>&copy; 2025 Shutong Zhang. Built with Code & Art.</p>
+    </footer>
+
+    <script>
+        const canvas = document.getElementById('canvas-bg');
+        const ctx = canvas.getContext('2d');
+        let particlesArray;
+        canvas.width = window.innerWidth; canvas.height = window.innerHeight;
+        window.addEventListener('resize', () => { canvas.width = window.innerWidth; canvas.height = window.innerHeight; init(); });
+        class Particle {
+            constructor() {
+                this.x = Math.random() * canvas.width; this.y = Math.random() * canvas.height;
+                this.size = Math.random() * 2; this.speedX = (Math.random() * 0.2) - 0.1; this.speedY = (Math.random() * 0.2) - 0.1;
+            }
+            update() { this.x += this.speedX; this.y += this.speedY; if (this.x > canvas.width || this.x < 0) this.speedX *= -1; if (this.y > canvas.height || this.y < 0) this.speedY *= -1; }
+            draw() { ctx.fillStyle = 'rgba(0, 243, 255, 0.3)'; ctx.beginPath(); ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2); ctx.fill(); }
+        }
+        function init() { particlesArray = []; for (let i = 0; i < 60; i++) particlesArray.push(new Particle()); }
+        function animate() { ctx.clearRect(0, 0, canvas.width, canvas.height); particlesArray.forEach(p => { p.update(); p.draw(); }); requestAnimationFrame(animate); }
+        init(); animate();
+    </script>
+</body>
+
+</html>
